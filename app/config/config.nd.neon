@@ -1,0 +1,13 @@
+database:
+	dsn: 'mysql:host=127.0.0.1;dbname=creadit-porta-task'
+	user: root
+	password:
+	options:
+		lazy: yes
+
+services:
+	- App\Model\Db\NDPersister
+	- App\Model\Comment\NDCommentRepository
+	- App\Model\Thread\NDThreadRepository
+	- App\Model\User\NDUserRepository
+

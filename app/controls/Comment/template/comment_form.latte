@@ -1,0 +1,50 @@
+<div id="comment-form-wrapper" class="my-3 p-3 bg-white rounded box-shadow mt-5">
+
+	{snippet flashes}
+		<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}" role="alert">
+			{$flash->message}
+		</div>
+	{/snippet}
+
+	{if $user->isLoggedIn()}
+	<h5 class="pb-2 mb-2">Komentovat</h5>
+	<p class="text-muted">
+		Příspěvky píši tak, aby se nikoho nedotkly, neponížily, nebyly zbytečně ironické, naopak se snažím být milý, nápomocný a konstruktivní. Žádám, aby v opačném případě byl příspěvek smazán.
+	</p>
+		{snippet commentForm}
+			<form class="ajax" n:name="commentForm">
+				{*
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						{label author}
+						<input class="form-control" n:name="author">
+					</div>
+					<div class="form-group col-md-6">
+						{label email}
+						<input type="email" class="form-control" n:name="email">
+					</div>
+				</div>
+				*}
+
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						{label text}
+						<textarea n:name="text" rows="8" class="form-control"></textarea>
+					</div>
+				</div>
+
+				{input comment}
+				{input firstname}
+				{input phone}
+
+				<button type="submit" class="btn btn-primary" n:name="send">Poslat</button>
+			</form>
+		{/snippet}
+	{else}
+		<p class="text-muted">Pro možnost přidávání příspěvků je nejprve nutné se přihlásit.</p>
+		{snippet commentSign}
+			{import '../../../presenters/templates/components/form.latte'}
+			{include  bootstrap-form signInForm}
+		{/snippet}
+	{/if}
+</div>

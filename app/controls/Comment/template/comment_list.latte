@@ -1,0 +1,27 @@
+<div class="my-3 p-3 bg-white rounded box-shadow">
+
+	{snippet flashes}
+		<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}" role="alert">
+			{$flash->message}
+		</div>
+	{/snippet}
+
+	{snippet comments}
+		{if count($comments) > 0}
+			<div n:foreach="$comments as $comment" n:class="!$iterator->first ? pt-3, !$iterator->last ? 'border-bottom pb-3', 'row border-gray mb-0'" id="{$comment->getId()->toString()}">
+				<div class="col-md-3 text-center border-right">
+					{$comment->getAuthorName()}<br>
+					<small class="d-block text-muted pt-2">{$comment->getPosted()|date:'j. n. Y H:i'}</small>
+					<small class="d-block text-muted">{$comment->getPosted()|ago}</small>
+					<a n:if="$user->isInRole(\App\Model\User\User::ROLE_ADMIN) || (($author = $comment->getAuthor()) && $author->getId()->equals($user->getId()))" class="btn btn-warning btn-sm mt-1 ajax" href="{plink edit! commentId => $comment->getId()->toString()}#comment-form-wrapper">Upravit</a>
+					<a n:if="$user->isInRole(\App\Model\User\User::ROLE_ADMIN) || (($author = $comment->getAuthor()) && $author->getId()->equals($user->getId()))" class="btn btn-danger btn-sm mt-1 ajax" data-confirm="opravdu chcete smazat tento příspěvek?" n:href="delete! $comment->getId()->toString()">Smazat</a>
+				</div>
+				<div class="col-md-9">
+					{$comment->getText()|breaklines}
+				</div>
+			</div>
+		{else}
+			<p class="text-muted mb-0"><i>Zatím nebyl přidán žádný příspěvěk.</i></p>
+		{/if}
+	{/snippet}
+</div>

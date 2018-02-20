@@ -1,0 +1,24 @@
+extensions:
+	console: Kdyby\Console\DI\ConsoleExtension
+	events: Kdyby\Events\DI\EventsExtension
+	annotations: Kdyby\Annotations\DI\AnnotationsExtension
+	doctrine: Kdyby\Doctrine\DI\OrmExtension
+
+
+doctrine:
+	host: localhost
+	user: root
+	password:
+	dbname: creadit-porta-task
+	metadata:
+		App\Model: %appDir%/model
+	types:
+		uuid: Ramsey\Uuid\Doctrine\UuidType
+
+
+services:
+	- App\Model\Db\DoctrinePersister
+	- App\Model\Comment\DoctrineCommentRepository
+	- App\Model\Thread\DoctrineThreadRepository
+	- App\Model\User\DoctrineUserRepository
+

@@ -1,0 +1,37 @@
+{block content}
+<main role="main" class="container">
+
+	<div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+		<div class="lh-100">
+			<h4 class="mb-0 text-white lh-100">Všechna vlákna</h4>
+			<small>Pojďte diskutovat</small>
+		</div>
+	</div>
+
+	<div class="my-3 p-3 bg-white rounded box-shadow">
+		<div n:foreach="$threads as $thread" n:class="!$iterator->first ? pt-3, !$iterator->last ? 'border-bottom pb-3', 'row border-gray mb-0'">
+			<div class="col-md-8">
+				<h5 class="d-block text-gray-dark mb-0">
+					<a n:href="Thread: $thread">{$thread->getName()}</a>
+				</h5>
+				{$thread->getDescription()}
+			</div>
+			<div class="col-md-1 lh-48px text-center">
+				{$thread->getNumOfComments()}
+			</div>
+			<div class="col-md-3 lh-48px text-center">
+				{if ($last = $thread->getLastComment())}
+					<a href="{plink Thread: $thread}#{$last->getId()->toString()}">{$last->getPosted()|ago}</a>
+				{else}
+					<i class="small">Zatím nebyl přidán žádný příspěvěk.</i>
+				{/if}
+			</div>
+		</div>
+	</div>
+
+	<div class="my-3 p-3 bg-white rounded box-shadow mt-5">
+		<h5 class="pb-2 mb-2">Jak se zapojit</h5>
+		<p>Morbi blandit varius pulvinar. Mauris dui nisl, bibendum sed nunc in, efficitur facilisis quam. Aenean metus neque, dignissim sed lectus quis, egestas rhoncus risus. Duis elementum risus et velit eleifend, non pharetra dui hendrerit. Donec in orci nibh. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sit amet risus pharetra, pharetra nulla nec, vestibulum neque.</p>
+	</div>
+
+</main>
