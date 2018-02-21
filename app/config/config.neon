@@ -4,8 +4,6 @@
 #
 parameters:
 
-includes:
-	- webloader.neon
 
 application:
 	errorPresenter: Error

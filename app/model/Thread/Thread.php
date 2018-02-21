@@ -98,11 +98,15 @@ class Thread
 		return $result;
 	}
 
-	public function getNumOfComments(): int
+
+	public function getNumOfComments(bool $ignoreDeleted = true): int
 	{
-		return $this->comments->filter(function (Comment $comment) {
-			return $comment->getDeleted() === null;
-		})->count();
+		if ($ignoreDeleted) {
+			return $this->comments->filter(function (Comment $comment) {
+				return $comment->getDeleted() === null;
+			})->count();
+		}
+		return $this->comments->count();
 	}
 
 
@@ -187,5 +191,10 @@ class Thread
 	public function setDeleted(\DateTime $deleted = null)
 	{
 		$this->deleted = $deleted;
+	}
+
+	public function clearComments(): void
+	{
+		$this->comments->clear();
 	}
 }
