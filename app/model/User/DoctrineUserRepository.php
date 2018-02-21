@@ -40,10 +40,16 @@ class DoctrineUserRepository implements IUserRepository
 
 	public function getByEmail(string $email): User
 	{
-		$user = $this->repository->findOneBy(['email' => $email]);
+		$user = $this->repository->findOneBy(['email' => $email, 'deleted' => null]);
 		if ($user === null) {
 			throw new UserNotFoundException('User: ' . $email);
 		}
 		return $user;
+	}
+
+
+	public function getDataSource()
+	{
+		return $this->repository->createQueryBuilder('qb');
 	}
 }

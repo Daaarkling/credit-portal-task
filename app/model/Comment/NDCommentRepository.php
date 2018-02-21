@@ -57,6 +57,7 @@ class NDCommentRepository implements ICommentRepository
 		$comment = new Comment($author, $thread, $activeRow->text);
 		$comment->setId(Uuid::fromString($activeRow->id));
 		$comment->setPosted($activeRow->posted);
+		$comment->setDeleted($activeRow->deleted);
 		return $comment;
 	}
 }

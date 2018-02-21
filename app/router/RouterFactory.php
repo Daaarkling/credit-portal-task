@@ -31,6 +31,8 @@ class RouterFactory
 		$router = new RouteList;
 
 		$router[] = new Route('prihlaseni', 'Sign:in');
+		$router[] = new Route('registrace', 'Sign:up');
+		$router[] = new Route('zmena-hesla', 'Password:default');
 
 		// Thread
 		$router[] = new Route('vlakno/<id>', [

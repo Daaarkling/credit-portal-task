@@ -20,9 +20,12 @@
 {* for Bootstrap v3 *}
 {define bootstrap-form $form}
 	<form n:name=$form class="ajax">
-	<ul class=error n:if="$form->ownErrors">
-		<li n:foreach="$form->ownErrors as $error">{$error}</li>
-	</ul>
+
+	{if $form->ownErrors}
+		<div n:foreach="$form->ownErrors as $error" class="alert alert-danger" role="alert">
+			{$error}
+		</div>
+	{/if}
 
 	<div n:foreach="$form->controls as $name => $input"
 		n:if="!$input->getOption(rendered) && $input->getOption(type) !== hidden"

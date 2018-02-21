@@ -2,29 +2,37 @@
 
 namespace App\Forms;
 
-use App\Model;
-use App\Model\User\Authenticator;
-use Nette;
+use App\Model\User\IUserFacade;
+use App\Model\User\User;
+use App\Model\User\UserDuplicateNameException;
 use Nette\Application\UI\Form;
+use Nette\SmartObject;
 
 
 class SignUpFormFactory
 {
-	use Nette\SmartObject;
+	use SmartObject;
 
 	const PASSWORD_MIN_LENGTH = 8;
 
 	/** @var FormFactory */
 	private $factory;
 
-	/** @var Authenticator */
-	private $authenticator;
+	/** @var IUserFacade */
+	private $userFacade;
+
+	/** @var \Nette\Security\User */
+	private $user;
 
 
-	public function __construct(FormFactory $factory, Authenticator $authenticator)
-	{
+	public function __construct(
+		FormFactory $factory,
+		IUserFacade $userFacade,
+		\Nette\Security\User $user
+	){
 		$this->factory = $factory;
-		$this->authenticator = $authenticator;
+		$this->userFacade = $userFacade;
+		$this->user = $user;
 	}
 
 
@@ -35,24 +43,34 @@ class SignUpFormFactory
 	public function create(callable $onSuccess): Form
 	{
 		$form = $this->factory->create();
-		$form->addText('username', 'Pick a username:')
-			->setRequired('Please pick a username.');
+		$form->addText('name', '*Jméno')
+			->setRequired('Zadejte prosím své jméno.');
 
-		$form->addEmail('email', 'Your e-mail:')
-			->setRequired('Please enter your e-mail.');
+		$form->addEmail('email', '*E-mail')
+			->setType('email')
+			->setRequired('Zadejte prosím svůj e-mail.')
+			->addRule(Form::EMAIL, 'Zadejte prosím platný tvar e-mailu.');
 
-		$form->addPassword('password', 'Create a password:')
-			->setOption('description', sprintf('at least %d characters', self::PASSWORD_MIN_LENGTH))
-			->setRequired('Please create a password.')
-			->addRule($form::MIN_LENGTH, null, self::PASSWORD_MIN_LENGTH);
+		$form->addPassword('password', '*Heslo')
+			->setRequired('Zadejte prosím heslo.')
+			->addRule($form::MIN_LENGTH, 'Heslo musí být minimálně %d znaků dlouhé.', self::PASSWORD_MIN_LENGTH);
 
-		$form->addSubmit('send', 'Sign up');
+		$form->addPassword('verify', '*Heslo pro kontrolu')
+			->setOmitted()
+			->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu.')
+			->addRule(Form::EQUAL, 'Hesla se neshodují', $form['password']);
+
+		$form->addSubmit('send', 'Registrovat');
 
 		$form->onSuccess[] = function (Form $form, $values) use ($onSuccess) {
 			try {
-				$this->authenticator->add($values->username, $values->email, $values->password);
-			} catch (Model\DuplicateNameException $e) {
-				$form['username']->addError('Username is already taken.');
+				$user = new User($values['name'], $values['email'], $values['password'], User::ROLE_MEMBER);
+				$user =$this->userFacade->save($user);
+				if (!$this->user->isInRole(User::ROLE_ADMIN)) {
+					$this->user->login($user->getEmail(), $values['password']);
+				}
+			} catch (UserDuplicateNameException $e) {
+				$form['email']->addError('Tento e-mail je již zaregistrován.');
 				return;
 			}
 			$onSuccess();

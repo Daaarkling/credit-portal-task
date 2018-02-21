@@ -28,13 +28,13 @@ class TimeAgoInWords
 {
 	/**
 	 * Czech helper time ago in words.
-	 * @param  int
+	 * @param mixed $time
 	 * @return string
 	 */
-	public static function timeAgoInWords($time)
+	public static function timeAgoInWords($time): string
 	{
 		if (!$time) {
-			return FALSE;
+			return '';
 		} elseif (is_numeric($time)) {
 			$time = (int) $time;
 		} elseif ($time instanceof DateTime) {
@@ -73,7 +73,7 @@ class TimeAgoInWords
 	/**
 	 * Plural: three forms, special cases for 1 and 2, 3, 4.
 	 * (Slavic family: Slovak, Czech)
-	 * @param  int
+	 * @param int $n
 	 * @return mixed
 	 */
 	private static function plural($n)

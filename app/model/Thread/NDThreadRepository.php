@@ -62,6 +62,11 @@ class NDThreadRepository implements IThreadRepository
 	}
 
 
+	public function getDataSource()
+	{
+		return $this->context->table(Thread::TABLE_NAME);
+	}
+
 
 	private function createEntity(ActiveRow $activeRow): Thread
 	{
@@ -69,6 +74,7 @@ class NDThreadRepository implements IThreadRepository
 
 		$thread = new Thread($activeRow->name, $activeRow->slug, $activeRow->description);
 		$thread->setId(Uuid::fromString($activeRow->id));
+		$thread->setDeleted($activeRow->deleted);
 		$thread->setComments($comments);
 		return $thread;
 	}

@@ -69,7 +69,7 @@ body {
 
 .text-white-50 { color: rgba(255, 255, 255, .5); }
 
-.bg-purple { background-color: var(--purple); }
+.bg-purple { background-color: rgb(111, 66, 193); }
 
 .border-bottom { border-bottom: 1px solid #e5e5e5; }
 .border-right { border-right: 1px solid #e5e5e5; }
@@ -82,3 +82,13 @@ body {
 .lh-48px {line-height: 48px;}
 
 .hidden {display: none;}
+
+.text-deleted {
+	font-style: italic;
+	text-decoration: line-through;
+}
+
+.text-deleted-none {
+	font-style: normal;
+	text-decoration: none;
+}

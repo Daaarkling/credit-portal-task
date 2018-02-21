@@ -37,12 +37,18 @@ class NDUserRepository implements IUserRepository
 
 	public function getByEmail(string $email): User
 	{
-		$activeRow = $this->context->table(User::TABLE_NAME)->where('email', $email)->fetch();
+		$activeRow = $this->context->table(User::TABLE_NAME)->where('email ? AND deleted ?', $email, null)->fetch();
 		if (!$activeRow) {
 			throw new UserNotFoundException('User: ' . $email);
 		}
 
 		return $this->createEntity($activeRow);
+	}
+
+
+	public function getDataSource()
+	{
+		return $this->context->table(User::TABLE_NAME);
 	}
 
 

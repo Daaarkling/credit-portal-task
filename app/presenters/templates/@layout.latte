@@ -8,9 +8,7 @@
 
 	<title>{ifset title}{include title|stripHtml} | {/ifset}Credit Portal Task</title>
 
-	<link rel="stylesheet" href="{$basePath}/css/bootstrap.min.css">
-	<link rel="stylesheet" href="{$basePath}/css/happy.min.css">
-	<link rel="stylesheet" href="{$basePath}/css/style.css">
+	{control css}
 
 	{block head}{/block}
 </head>
@@ -26,23 +24,35 @@
 
 	<div class="navbar-collapse offcanvas-collapse" n:snippet="menu">
 		<ul class="navbar-nav mr-auto">
-			<li n:if="$user->isLoggedIn()" class="nav-item">
-				<a class="nav-link" href="#">{$user->identity->data['name']}</a>
+			<li class="nav-item">
+				<a class="nav-link" n:href="Homepage:">Úvod</a>
 			</li>
 			{if $user->isInRole('admin')}
 				<li class="nav-item">
-					<a class="nav-link" n:href="ThreadEdit:">Vlákna</a>
+					<a class="nav-link" n:href="ThreadAdmin:">Vlákna</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" n:href="UserAdmin:">Uživatelé</a>
 				</li>
 			{/if}
 		</ul>
 		<ul class="navbar-nav">
-			<li class="nav-item">
-				{if $user->isLoggedIn()}
-					<a class="nav-link" n:href="signOut!">Odhlásit se</a>
-				{else}
+			{if $user->isLoggedIn()}
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="dropdown01" aria-haspopup="true" aria-expanded="false">{$user->identity->data['name']}</a>
+					<div class="dropdown-menu" aria-labelledby="dropdown01">
+						<a class="dropdown-item" n:href="Password:">Změna hesla</a>
+						<a class="dropdown-item" n:href="signOut!">Odhlásit se</a>
+					</div>
+				</li>
+			{else}
+				<li class="nav-item">
 					<a class="nav-link" n:href="Sign:in">Přihlášení</a>
-				{/if}
-			</li>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" n:href="Sign:up">Registrace</a>
+				</li>
+			{/if}
 		</ul>
 	</div>
 
@@ -50,9 +60,7 @@
 
 {snippet flashes}
 	<div n:if="count($flashes) > 0" class="container mt-2">
-		<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}" role="alert">
-			{$flash->message}
-		</div>
+		{include './components/flashes.latte'}
 	</div>
 {/snippet}
 
@@ -61,17 +69,7 @@
 {/snippet}
 
 {block scripts}
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	{*<script src="https://nette.github.io/resources/js/netteForms.min.js"></script>*}
-	<script src="{$basePath}/js/nette.ajax.js"></script>
-	<script src="{$basePath}/js/nette.init.js"></script>
-	<script src="{$basePath}/js/confirm.ajax.js"></script>
-	<script src="{$basePath}/js/form-protection.ajax.js"></script>
-	<script src="{$basePath}/js/live-form-validation.js"></script>
-	<script src="{$basePath}/js/happy.min.js"></script>
-	<script src="{$basePath}/js/datagrid.js"></script>
-	<script src="{$basePath}/js/datagrid-spinners.min.js"></script>
-	<script src="{$basePath}/js/main.js"></script>
+	{control js}
 {/block}
 </body>
 </html>

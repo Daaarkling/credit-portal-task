@@ -15,6 +15,7 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity
+ * @property \Datetime $deleted
  */
 class Thread
 {
@@ -47,6 +48,12 @@ class Thread
 	 * @var Comment
 	 */
 	private $comments;
+
+	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 * @var \DateTime|null
+	 */
+	private $deleted;
 
 	/**
 	 * Thread constructor.
@@ -86,13 +93,16 @@ class Thread
 			'name' => $this->name,
 			'description' => $this->description,
 			'slug' => $this->slug,
+			'deleted' => $this->deleted,
 		];
 		return $result;
 	}
 
 	public function getNumOfComments(): int
 	{
-		return $this->comments->count();
+		return $this->comments->filter(function (Comment $comment) {
+			return $comment->getDeleted() === null;
+		})->count();
 	}
 
 
@@ -166,5 +176,16 @@ class Thread
 	public function setDescription(string $description = null)
 	{
 		$this->description = $description;
+	}
+
+
+	public function getDeleted(): ?\DateTime
+	{
+		return $this->deleted;
+	}
+
+	public function setDeleted(\DateTime $deleted = null)
+	{
+		$this->deleted = $deleted;
 	}
 }

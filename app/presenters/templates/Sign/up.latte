@@ -1,6 +1,17 @@
 {block content}
-<h1 n:block=title>Sign Up</h1>
+<main role="main" class="container">
 
-{control signUpForm}
+	<div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+		<div class="lh-100">
+			<h4 n:block="title" class="mb-0 text-white lh-100">Registrace</h4>
+		</div>
+	</div>
 
-<p><a n:href="in">Already have an account? Log in.</a></p>
+	<div class="my-3 p-3 bg-white rounded box-shadow">
+		<p n:if="$user->isInRole('admin')" class="text-muted">Nyní jste přihlášen jako admin, nově zaregistrovaný uživatel bude mít také roli admina.</p>
+		{snippet form}
+			{import '../components/form.latte'}
+			{include  bootstrap-form signUpForm}
+		{/snippet}
+	</div>
+</main>

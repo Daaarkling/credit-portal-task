@@ -25,8 +25,14 @@ class NDPersister implements IPersister
 			$uuid = Uuid::uuid4();
 			$data['id'] = $uuid->toString();
 			$object->setId($uuid);
+			$this->context->table($object::TABLE_NAME)
+				->insert($data);
+		} else {
+			$this->context->table($object::TABLE_NAME)
+				->where('id', $object->getId()->toString())
+				->update($data);
 		}
-		$this->context->table($object::TABLE_NAME)->insert($data);
+
 		return $object;
 	}
 

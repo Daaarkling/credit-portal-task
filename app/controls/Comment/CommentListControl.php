@@ -55,7 +55,7 @@ class CommentListControl extends BaseControl {
 			$this->redrawControl('comments');
 			$this->redrawControl('flashes');
 		} catch (InvalidUuidStringException $e) {
-			$this->error();
+			$this->presenter->error();
 		}
 	}
 

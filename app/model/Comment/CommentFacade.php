@@ -11,7 +11,7 @@ use Nette\Security\User;
 use Nette\SmartObject;
 use Ramsey\Uuid\Uuid;
 
-class CommendFacade implements ICommentFacade
+class CommentFacade implements ICommentFacade
 {
 	use SmartObject;
 
@@ -42,8 +42,10 @@ class CommendFacade implements ICommentFacade
 		}
 
 		$comment = $this->commentRepository->getById($id);
-		if ($this->user->isInRole(\App\Model\User\User::ROLE_ADMIN) || (($author = $comment->getAuthor()) && $author->getId()->equals($this->user->getId()))) {
-			$this->persister->remove($comment);
+		if ($this->user->isInRole(\App\Model\User\User::ROLE_ADMIN) || (($author = $comment->getAuthor()) && $author->getId()->equals($this->user->getId()) && $comment->canBeStillModified())) {
+			//$this->persister->remove($comment);
+			$comment->setDeleted(new \DateTime());
+			$this->persister->persist($comment);
 		} else {
 			throw new ActionNotAllowedException();
 		}
@@ -58,7 +60,7 @@ class CommendFacade implements ICommentFacade
 			}
 		// Edit
 		} else {
-			if (!($this->user->isInRole(\App\Model\User\User::ROLE_ADMIN) || (($author = $comment->getAuthor()) && $author->getId()->equals($this->user->getId())))) {
+			if (!($this->user->isInRole(\App\Model\User\User::ROLE_ADMIN) || (($author = $comment->getAuthor()) && $author->getId()->equals($this->user->getId()) && $comment->canBeStillModified()))) {
 				throw new ActionNotAllowedException();
 			}
 		}

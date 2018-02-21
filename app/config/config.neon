@@ -4,6 +4,8 @@
 #
 parameters:
 
+includes:
+	- webloader.neon
 
 application:
 	errorPresenter: Error
@@ -40,13 +42,20 @@ services:
 	- App\Forms\FormFactory
 	- App\Controls\Comment\ICommentFormControlFactory
 	- App\Controls\Comment\ICommentListControlFactory
-	- App\Model\Comment\CommendFacade
+	- App\Model\Comment\CommentFacade
 	- App\Forms\SignInFormFactory
+	- App\Forms\SignUpFormFactory
+	- App\Forms\PasswordFormFactory
+	- App\Forms\ThreadFormFactory
+	- App\Forms\UserFormFactory
+	- App\Model\User\UserFacade
+	- App\Model\Thread\ThreadFacade
 
 
 
 extensions:
 	console: Kdyby\Console\DI\ConsoleExtension
 	events: Kdyby\Events\DI\EventsExtension
+	webloader: WebLoader\Nette\Extension
 
 

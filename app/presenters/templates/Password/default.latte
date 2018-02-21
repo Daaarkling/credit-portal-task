@@ -1,0 +1,16 @@
+{block content}
+<main role="main" class="container">
+
+	<div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+		<div class="lh-100">
+			<h4 n:block="title" class="mb-0 text-white lh-100">Změna hesla</h4>
+		</div>
+	</div>
+
+	<div class="my-3 p-3 bg-white rounded box-shadow">
+		{snippet form}
+			{import '../components/form.latte'}
+			{include  bootstrap-form passwordForm}
+		{/snippet}
+	</div>
+</main>

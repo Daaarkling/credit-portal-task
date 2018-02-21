@@ -8,10 +8,9 @@
 	</div>
 
 	<div class="my-3 p-3 bg-white rounded box-shadow">
-		{import '../components/form.latte'}
-		{include  bootstrap-form signInForm}
-		{* OR
-		{control signInForm}
-		*}
+		{snippet form}
+			{import '../components/form.latte'}
+			{include  bootstrap-form signInForm}
+		{/snippet}
 	</div>
 </main>

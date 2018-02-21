@@ -5,7 +5,6 @@ namespace App\Model\Comment;
 
 
 use App\Model\Db\TRamseyUuidIdentifier;
-use App\Model\InvalidArgumentException;
 use App\Model\Thread\Thread;
 use App\Model\User\User;
 use Doctrine\ORM\Mapping as ORM;
@@ -46,6 +45,12 @@ class Comment
 	private $thread;
 
 	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 * @var \DateTime|null
+	 */
+	private $deleted;
+
+	/**
 	 * Comment constructor.
 	 * @param User $author
 	 * @param Thread $thread
@@ -67,7 +72,8 @@ class Comment
 			'author_id' => $this->author ? $this->author->getId()->toString() : null,
 			'thread_id' => $this->thread ? $this->thread->getId()->toString() : null,
 			'posted' => $this->posted,
-			'text' => 'text',
+			'text' => $this->text,
+			'deleted' => $this->deleted,
 		];
 		return $result;
 	}
@@ -76,6 +82,14 @@ class Comment
 	{
 		return $this->author ? $this->author->getName() : '';
 	}
+
+
+	public function canBeStillModified(): bool
+	{
+		$posted = clone $this->getPosted();
+		return $posted->add(new \DateInterval('PT30M')) > new \DateTime();
+	}
+
 
 	public function getAuthor(): ?User
 	{
@@ -115,5 +129,16 @@ class Comment
 	public function setThread(Thread $thread)
 	{
 		$this->thread = $thread;
+	}
+
+
+	public function getDeleted(): ?\DateTime
+	{
+		return $this->deleted;
+	}
+
+	public function setDeleted(\DateTime $deleted = null)
+	{
+		$this->deleted = $deleted;
 	}
 }

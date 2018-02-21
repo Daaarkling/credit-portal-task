@@ -42,6 +42,11 @@ class DoctrineThreadRepository implements IThreadRepository
 		return $entity;
 	}
 
+	public function getDataSource()
+	{
+		return $this->repository->createQueryBuilder('qb');
+	}
+
 
 	public function getBySlug(string $slug): Thread
 	{

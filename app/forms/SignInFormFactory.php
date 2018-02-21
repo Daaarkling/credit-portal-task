@@ -32,6 +32,7 @@ class SignInFormFactory
 	{
 		$form = $this->factory->create();
 		$form->addText('username', 'E-mail')
+			->setType('email')
 			->setRequired('Zadejte prosím svůj e-mail.')
 			->addRule(Form::EMAIL, 'Zadejte prosím platný tvar e-mailu.');
 

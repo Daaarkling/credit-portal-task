@@ -34,10 +34,14 @@
 		"kdyby/doctrine": "^3.3",
 		"ramsey/uuid-doctrine": "^1.4",
 		"nextras/secured-links": "^1.4",
-		"ublaboo/datagrid": "^5.5"
+		"ublaboo/datagrid": "^5.5",
+		"janmarek/webloader": "^2.5",
+		"joseki/webloader-filters": "^1.1"
 	},
 	"require-dev": {
-		"nette/tester": "^2.0"
+		"nette/tester": "^2.0",
+		"phpstan/phpstan-nette": "^0.9",
+		"phpstan/phpstan-doctrine": "^0.9.1"
 	},
 	"minimum-stability": "stable",
 	"config": {

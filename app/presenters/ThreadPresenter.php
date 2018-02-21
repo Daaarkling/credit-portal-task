@@ -50,6 +50,9 @@ class ThreadPresenter extends BasePresenter
 	public function actionDefault(Thread $id)
 	{
 		$this->thread = $id;
+		if ($this->thread->getDeleted()) {
+			$this->error();
+		}
 	}
 
 

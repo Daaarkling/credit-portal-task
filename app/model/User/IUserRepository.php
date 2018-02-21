@@ -22,4 +22,11 @@ interface IUserRepository
 	 * @throws UserNotFoundException
 	 */
 	public function getByEmail(string $email): User;
+
+
+	/**
+	 * For Grid component
+	 * @return mixed
+	 */
+	public function getDataSource();
 }

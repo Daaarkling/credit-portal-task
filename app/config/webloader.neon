@@ -1,0 +1,40 @@
+services:
+	#lessFilter: WebLoader\Filter\LessFilter
+	cssMinFilter: Joseki\Webloader\CssMinFilter
+	jsMinFilter: Joseki\Webloader\JsMinFilter
+	wlCssFilter: WebLoader\Filter\CssUrlsFilter(%wwwDir%/)
+
+
+webloader:
+	css:
+		frontend:
+			remoteFiles:
+
+			files:
+				- bootstrap.min.css
+				- happy.min.css
+				- datagrid.min.css
+				- datagrid-spinners.min.css
+				- style.css
+			filters:
+				- @wlCssFilter
+				- @cssMinFilter
+	js:
+		frontend:
+			remoteFiles:
+				- https://code.jquery.com/jquery-3.1.1.min.js
+			files:
+				- bootstrap.min.js
+				- nette.ajax.js
+				- nette.init.js
+				- confirm.ajax.js
+				- form-protection.ajax.js
+				- happy.ajax.js
+				- live-form-validation.js
+				- happy.min.js
+				- datagrid.js
+				- datagrid-spinners.min.js
+				- main.js
+			filtres:
+				- @jsMinFilter
+

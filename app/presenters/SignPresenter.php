@@ -3,42 +3,78 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use App\Forms;
+use App\Forms\SignInFormFactory;
+use App\Forms\SignUpFormFactory;
+use App\Model\User\User;
 use Nette\Application\UI\Form;
 
 
 class SignPresenter extends BasePresenter
 {
-	/** @var Forms\SignInFormFactory */
+	/** @var SignInFormFactory */
 	private $signInFactory;
+
+	/** @var SignUpFormFactory */
+	private $signUpFactory;
 
 	/** @persistent */
 	public $backlink = '';
 
 
-	public function __construct(Forms\SignInFormFactory $signInFactory)
-	{
+	public function __construct(
+		SignInFormFactory $signInFactory,
+		SignUpFormFactory $signUpFactory
+	){
 		parent::__construct();
 		$this->signInFactory = $signInFactory;
+		$this->signUpFactory = $signUpFactory;
 	}
 
 
-	/**
-	 * Sign-in form factory.
-	 * @return Form
-	 */
-	protected function createComponentSignInForm()
+	public function actionIn()
 	{
-		return $this->signInFactory->create(function () {
+		if ($this->user->isLoggedIn()) {
+			$this->redirect('Homepage:');
+		}
+	}
+
+	public function actionUp()
+	{
+		if ($this->user->isLoggedIn() && !$this->user->isInRole(User::ROLE_ADMIN)) {
+			$this->redirect('Homepage:');
+		}
+	}
+
+
+
+	protected function createComponentSignInForm(): Form
+	{
+		$form = $this->signInFactory->create(function () {
 			$this->flashMessage('Byl jste úspěšně přihlášen.', 'warning');
 			$this->restoreRequest($this->backlink);
 			$this->redirect('Homepage:');
 		});
+		$form->onError[] = function () {
+			$this->redrawControl('form');
+		};
+		return $form;
 	}
 
 
-	public function actionOut()
+	protected function createComponentSignUpForm(): Form
 	{
-		$this->getUser()->logout();
+		$form = $this->signUpFactory->create(function () {
+			if ($this->user->isInRole(User::ROLE_ADMIN)) {
+				$this->flashMessage('Nový uživatel admin byl vytvořen.', 'warning');
+			} else {
+				$this->flashMessage('Byl jste úspěšně zaregistrován.', 'warning');
+			}
+			$this->restoreRequest($this->backlink);
+			$this->redirect('Homepage:');
+		});
+		$form->onError[] = function () {
+			$this->redrawControl('form');
+		};
+		return $form;
 	}
 }

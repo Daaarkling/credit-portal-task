@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model\Thread;
 
 use Ramsey\Uuid\Uuid;
+use Ublaboo\DataGrid\DataSource\IDataSource;
 
 interface IThreadRepository
 {
@@ -29,4 +30,11 @@ interface IThreadRepository
 	 * @throws ThreadNotFoundException
 	 */
 	public function getBySlug(string $slug): Thread;
+
+
+	/**
+	 * For Grid component
+	 * @return mixed
+	 */
+	public function getDataSource();
 }

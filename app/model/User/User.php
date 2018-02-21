@@ -17,6 +17,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * @ORM\Entity
  * @ORM\Table(indexes={@ORM\Index(name="search_idx", columns={"name", "email"})})
+ * @property \Datetime $deleted
  */
 class User
 {
@@ -60,6 +61,20 @@ class User
 	private $comments;
 
 	/**
+	 * @ORM\Column(type="datetime", nullable=true)
+	 * @var \DateTime|null
+	 */
+	private $deleted;
+
+
+	/**
+	 * @ORM\Column(type="boolean")
+	 * @var bool
+	 */
+	private $disabled;
+
+
+	/**
 	 * User constructor.
 	 * @param string $name
 	 * @param string $email
@@ -74,6 +89,7 @@ class User
 		$this->setPassword($password);
 		$this->role = $role;
 		$this->comments = new ArrayCollection();
+		$this->disabled = false;
 	}
 
 
@@ -83,6 +99,8 @@ class User
 			$user = new self($data['name'], $data['email'], $data['password'], $data['role']);
 			$user->setId(Uuid::fromString($data['id']));
 			$user->setPassword($data['password'], false);
+			$user->setDisabled((bool) $data['disabled']);
+			$user->setDeleted($data['deleted']);
 			return $user;
 		} catch (\Exception $e) {
 			throw new InvalidArgumentException('Array must contains: name, email, password and role key.');
@@ -96,6 +114,9 @@ class User
 			'name' => $this->name,
 			'email' => $this->email,
 			'role' => $this->role,
+			'disabled' => $this->disabled,
+			'deleted' => $this->deleted,
+			'password' => $this->password,
 		];
 		return $result;
 	}
@@ -154,5 +175,28 @@ class User
 	public function setRole(string $role)
 	{
 		$this->role = $role;
+	}
+
+	public function getDeleted(): ?\DateTime
+	{
+		return $this->deleted;
+	}
+
+	public function setDeleted(\DateTime $deleted = null)
+	{
+		$this->deleted = $deleted;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isDisabled(): bool
+	{
+		return $this->disabled;
+	}
+
+	public function setDisabled(bool $disabled)
+	{
+		$this->disabled = $disabled;
 	}
 }

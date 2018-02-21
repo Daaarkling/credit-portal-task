@@ -9,29 +9,36 @@
 	</div>
 
 	<div class="my-3 p-3 bg-white rounded box-shadow">
-		<div n:foreach="$threads as $thread" n:class="!$iterator->first ? pt-3, !$iterator->last ? 'border-bottom pb-3', 'row border-gray mb-0'">
-			<div class="col-md-8">
-				<h5 class="d-block text-gray-dark mb-0">
-					<a n:href="Thread: $thread">{$thread->getName()}</a>
-				</h5>
-				{$thread->getDescription()}
+		{foreach $threads as $thread}
+			{continueIf $thread->getDeleted()}
+			<div n:class="!$iterator->first ? pt-3, !$iterator->last ? 'border-bottom pb-3', 'row border-gray mb-0'">
+				<div class="col-md-8">
+					<h5 class="d-block text-gray-dark mb-0">
+						<a n:href="Thread: $thread">{$thread->getName()}</a>
+					</h5>
+					{$thread->getDescription()}
+				</div>
+				<div class="col-md-1 lh-48px text-center">
+					{$thread->getNumOfComments()}
+				</div>
+				<div class="col-md-3 lh-48px text-center">
+					{if ($last = $thread->getLastComment())}
+						<a href="{plink Thread: $thread}#{$last->getId()->toString()}">{$last->getPosted()|ago}</a>
+					{else}
+						<i class="small">Zatím nebyl přidán žádný příspěvěk.</i>
+					{/if}
+				</div>
 			</div>
-			<div class="col-md-1 lh-48px text-center">
-				{$thread->getNumOfComments()}
-			</div>
-			<div class="col-md-3 lh-48px text-center">
-				{if ($last = $thread->getLastComment())}
-					<a href="{plink Thread: $thread}#{$last->getId()->toString()}">{$last->getPosted()|ago}</a>
-				{else}
-					<i class="small">Zatím nebyl přidán žádný příspěvěk.</i>
-				{/if}
-			</div>
-		</div>
+		{/foreach}
 	</div>
 
 	<div class="my-3 p-3 bg-white rounded box-shadow mt-5">
 		<h5 class="pb-2 mb-2">Jak se zapojit</h5>
-		<p>Morbi blandit varius pulvinar. Mauris dui nisl, bibendum sed nunc in, efficitur facilisis quam. Aenean metus neque, dignissim sed lectus quis, egestas rhoncus risus. Duis elementum risus et velit eleifend, non pharetra dui hendrerit. Donec in orci nibh. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sit amet risus pharetra, pharetra nulla nec, vestibulum neque.</p>
+		{if !$user->isLoggedIn()}
+			<p class="text-muted">Aby jste mohli psát příspěvky je nutné se <a n:href="Sign:up">zaregistrovat</a>, pokud již účet máte nezbývá se než <a n:href="Sign:in">příhlásit</a>.</p>
+		{else}
+			<p class="text-muted">Jste přihlášěn jako {$user->identity->data['name']}. {if $user->identity->data['disabled']}Tento účet má ZAKÁZÁNO psát příspěvky.{else}Z tohoto účtu můžete psát příspěvky.{/if}</p>
+		{/if}
 	</div>
 
 </main>

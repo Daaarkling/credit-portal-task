@@ -1,0 +1,31 @@
+{
+  "name": "credit-portal-task",
+  "homepage": "https://github.com/Daaarkling/credit-portal-task",
+  "authors": [
+    "Jan Vanura <jano.vano@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "app",
+    "bin",
+    "log",
+    "temp",
+    "vendor",
+    "www",
+    "composer.json"
+  ],
+  "dependencies": {
+    "ublaboo-datagrid": "^5.5.6",
+    "bootstrap": "^4.0.0",
+    "nette-live-form-validation": "^1.9.0",
+    "jquery": "^3.3.1"
+  }
+}

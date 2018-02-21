@@ -1,5 +1,5 @@
-Nette Sandbox
-=============
+Credit Portal Task
+=================
 
 This is a simple pre-packaged and pre-configured application using the [Nette](https://nette.org)
 that you can use as the starting point for your new applications.
