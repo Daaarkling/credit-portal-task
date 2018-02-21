@@ -1,5 +1,9 @@
 # Apache configuration file (see httpd.apache.org/docs/current/mod/quickreference.html)
 
+# presmerovani na www
+RewriteCond %{HTTP_HOST} ^([^.]*)\.([^.]*)$
+RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R,QSA,L]
+
 # disable directory listing
 <IfModule mod_autoindex.c>
 	Options -Indexes
