@@ -9,7 +9,7 @@ doctrine:
 	host: localhost
 	user: root
 	password:
-	dbname: creadit-porta-task
+	dbname: creadit-portal-task
 	metadata:
 		App\Model: %appDir%/model
 	types:

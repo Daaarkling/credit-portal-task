@@ -1,5 +1,5 @@
 database:
-	dsn: 'mysql:host=127.0.0.1;dbname=creadit-porta-task'
+	dsn: 'mysql:host=127.0.0.1;dbname=creadit-portal-task'
 	user: root
 	password:
 	options:
